@@ -7,12 +7,12 @@ Pod::Spec.new do |s|
   s.description  = <<-DESC
                    This is to be a dependency free wrapper to be used with your favorite networking method.  Simply create an instance of the Class, call the appropriate get method, then use the URL property to make a request using whatever you like to use.
                    DESC
-  s.homepage     = "https://github.com/akcbryant/LoL"
+  s.homepage     = "https://github.com/Akcbryant/LoL"
   s.license      = "MIT"
   s.author             = { "akcbryant" => "akcbryant@gmail.com" }
-  s.social_media_url   = "http://twitter.com/akcbryant"
-  s.platform     = :ios
-  s.source       = { :git => "https://github.com/akcbryant/LoL", :tag => "0.0.1" }
+  s.social_media_url   = "http://twitter.com/KirbyBryant"
+  s.platform     = :ios, "8.0"
+  s.source       = { :git => "https://github.com/Akcbryant/LoL.git" }
   s.source_files  = "Classes"
 
 end
