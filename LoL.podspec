@@ -13,6 +13,6 @@ Pod::Spec.new do |s|
   s.social_media_url   = "http://twitter.com/KirbyBryant"
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/Akcbryant/LoL.git", :tag => "0.0.1" }
-  s.source_files  = "Classes"
+  s.source_files  = "LoL.swift"
 
 end
