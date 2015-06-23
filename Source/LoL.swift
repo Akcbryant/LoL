@@ -35,10 +35,12 @@ class LoL {
     
     // MARK: Initializers
     
-    init(region: Region, apiKey: String) {
+    init(apiKey: String, region: Region?) {
         api_key = apiKey
-        regionRawValue = region.rawValue
-        regionBaseURLRawValue = getRegionBaseURL(region).rawValue
+        if let region = region {
+            regionRawValue = region.rawValue
+            regionBaseURLRawValue = getRegionBaseURL(region).rawValue
+        }
     }
     
     func setRegion(region: Region) {
@@ -51,18 +53,6 @@ class LoL {
     private func getRegionBaseURL(region: Region) -> RegionBaseURL {
         return RegionBaseURL(rawValue: "\(region.rawValue).api.pvp.net")!
     }
-    
-    
-    // MARK: Request
-    
-//    private func getRequest(URLString: NSString) {
-//        Alamofire.request(.GET, URLString as! String)
-//            .responseJSON { (_, _, JSON, _) in
-//                self.json = JSON
-//                println(self.json)
-//        }
-//    }
-    
     
     // MARK: Champion Info
     

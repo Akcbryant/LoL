@@ -11,7 +11,7 @@ import XCTest
 
 class AKCBLolTests: XCTestCase {
     
-    var lol = LoL(region: Region.na, apiKey: "")
+    var lol = LoL(apiKey: "", region: Region.na)
     
     override func setUp() {
         super.setUp()
