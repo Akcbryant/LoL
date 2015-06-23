@@ -7,11 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A5AAF8F41B38DA6B00BE0156 /* LoL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5AAF8E81B38DA6B00BE0156 /* LoL.framework */; };
 		A5AAF90B1B38DB9400BE0156 /* LoL.h in Headers */ = {isa = PBXBuildFile; fileRef = A5AAF9081B38DB9400BE0156 /* LoL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A5AAF9181B38DBD700BE0156 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AAF9151B38DBD700BE0156 /* Tests.swift */; };
 		A5AAF91B1B38DC6200BE0156 /* LoL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AAF9091B38DB9400BE0156 /* LoL.swift */; };
-		A5AAF91D1B38DD4700BE0156 /* LoL.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AAF9091B38DB9400BE0156 /* LoL.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,7 +44,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5AAF8F41B38DA6B00BE0156 /* LoL.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,7 +203,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A5AAF9181B38DBD700BE0156 /* Tests.swift in Sources */,
-				A5AAF91D1B38DD4700BE0156 /* LoL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
