@@ -24,14 +24,16 @@ public class LoL {
     private let SummonerVersion = "1.4"
     private let TeamVersion = "2.4"
 
-    var URL: NSString?
-    var json: AnyObject?
+    public var URL = ""
     
-    var api_key = ""
+    public var api_key = ""
     let https = "https"
 
     var regionRawValue = ""
     var regionBaseURLRawValue = ""
+    
+    var components = NSURLComponents()
+    var queryItems: [NSURLQueryItem] = []
     
     // MARK: Initializers
     
@@ -54,15 +56,24 @@ public class LoL {
         return RegionBaseURL(rawValue: "\(region.rawValue).api.pvp.net")!
     }
     
+    private func setupComponents(scheme: String, hostString: String) {
+        components.scheme = scheme
+        components.host = hostString
+    }
+    
+    private func addApiKeyQueryItemAndSetComponents() {
+        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
+        queryItems.append(idQueryItem)
+        components.queryItems = queryItems
+        queryItems = []
+    }
+    
     // MARK: Champion Info
     
     public func getChampions(freeToPlay: Bool?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(ChampionVersion)/champion")
         
-        var components = NSURLComponents()
-        
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var ftpQueryItem = NSURLQueryItem(name: "freeToPlay", value: "false")
         if let FTP = freeToPlay {
@@ -71,24 +82,23 @@ public class LoL {
             }
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [ftpQueryItem, idQueryItem]
-        components.queryItems = queryItems
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
+        queryItems.append(ftpQueryItem)
+        
+        addApiKeyQueryItemAndSetComponents()
+        
+        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+
     }
     
     public func getChampion(championID: Int) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(ChampionVersion)/champion/\(championID)")
         
-        var components = NSURLComponents()
-        
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
+
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -98,13 +108,10 @@ public class LoL {
     public func getcurrentGame(platformID: PlatformID, summonerID: Int) {
         let hostString = String("\(regionBaseURLRawValue)/observer-mode/rest/consumer/getSpectatorGameInfo/\(platformID.rawValue)/\(summonerID)")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
+
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -115,13 +122,9 @@ public class LoL {
     public func getFeaturedGames() {
         let hostString = String("\(regionBaseURLRawValue)/observer-mode/rest/featured")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -131,13 +134,10 @@ public class LoL {
     
     public func getRecentGames(summonerID: Int) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(GameVersion)/game/by-summoner/\(summonerID)/recent")
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        setupComponents(https, hostString: hostString)
+        
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -152,13 +152,9 @@ public class LoL {
         }
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -172,13 +168,9 @@ public class LoL {
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         hostString += "/entry"
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -191,13 +183,9 @@ public class LoL {
         }
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -211,13 +199,9 @@ public class LoL {
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         hostString += "/entry"
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -226,14 +210,11 @@ public class LoL {
     public func getChallengerLeague(gameType: RankedQueues) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(LeagueVersion)/league/challenger")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         let typeQueryItem = NSURLQueryItem(name: "type", value: gameType.rawValue)
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [typeQueryItem, idQueryItem]
-        components.queryItems = queryItems
+        queryItems.append(typeQueryItem)
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -242,14 +223,11 @@ public class LoL {
     public func getMasterLeague(gameType: RankedQueues) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(LeagueVersion)/league/master")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         let typeQueryItem = NSURLQueryItem(name: "type", value: gameType.rawValue)
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [typeQueryItem, idQueryItem]
-        components.queryItems = queryItems
+        queryItems.append(typeQueryItem)
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -261,11 +239,7 @@ public class LoL {
         
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/champion")
 
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
-        
-        var queryItems = [NSURLQueryItem]()
+        setupComponents(https, hostString: hostString)
         
         if let champData = champDataOptions {
             var champOptions = ""
@@ -277,23 +251,16 @@ public class LoL {
             queryItems.append(champQueryItem)
         }
 
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
 
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
     
     public func getChampionData(id: Int, champDataOptions: [ChampData]?) {
-        // WHY IS CHAMPDATAOPTIONS NIL!?!?!?!?!?!?!?!?
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/champion/\(id)")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
-        
-        var queryItems = [NSURLQueryItem]()
+        setupComponents(https, hostString: hostString)
         
         if let champData = champDataOptions {
             var champOptions = ""
@@ -305,9 +272,7 @@ public class LoL {
             queryItems.append(champQueryItem)
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -316,9 +281,7 @@ public class LoL {
     public func getItemList(itemDataOptions: [ItemListData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/item")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var itemOptions = ""
         if let itemData = itemDataOptions {
@@ -328,17 +291,13 @@ public class LoL {
             itemOptions.removeAtIndex(itemOptions.endIndex.predecessor())
         }
         
-        var queryItems = [NSURLQueryItem]()
-        
         if !itemOptions.isEmpty {
             var itemQueryItem = NSURLQueryItem(name: "itemListData", value: itemOptions)
             queryItems.append(itemQueryItem)
             
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -347,9 +306,7 @@ public class LoL {
     public func getItem(id: Int, itemDataOptions: [ItemData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/item/\(id)")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var itemOptions = ""
         if let itemData = itemDataOptions {
@@ -359,17 +316,13 @@ public class LoL {
             itemOptions.removeAtIndex(itemOptions.endIndex.predecessor())
         }
         
-        var queryItems = [NSURLQueryItem]()
-        
         if !itemOptions.isEmpty {
             var itemQueryItem = NSURLQueryItem(name: "itemData", value: itemOptions)
             queryItems.append(itemQueryItem)
             
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -378,13 +331,9 @@ public class LoL {
     public func getLanguageStrings() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/language-strings")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        var queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -393,13 +342,9 @@ public class LoL {
     public func getSupportedLanguages() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/languages")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        var queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -408,13 +353,9 @@ public class LoL {
     public func getMapData() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/map")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        var queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -424,11 +365,7 @@ public class LoL {
     
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/mastery")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
-        
-        var queryItems = [NSURLQueryItem]()
+        setupComponents(https, hostString: hostString)
         
         if let masteryData = masteryDataOptions {
             var masteryOptions = ""
@@ -440,11 +377,7 @@ public class LoL {
             queryItems.append(masteryQueryItem)
         }
         
-
-        
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -453,11 +386,7 @@ public class LoL {
     public func getMastery(id: Int, masteryDataOptions: [MasteryData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/mastery/\(id)")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
-        
-        var queryItems = [NSURLQueryItem]()
+        setupComponents(https, hostString: hostString)
         
         if let masteryData = masteryDataOptions {
             var masteryOptions = ""
@@ -469,10 +398,7 @@ public class LoL {
             queryItems.append(masteryQueryItem)
         }
         
-        
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -481,13 +407,9 @@ public class LoL {
     public func getRealmData() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/realm")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        var queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -497,9 +419,7 @@ public class LoL {
         
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/rune")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var runeOptions = ""
         if let runeData = runeDataOptions {
@@ -509,17 +429,13 @@ public class LoL {
             runeOptions.removeAtIndex(runeOptions.endIndex.predecessor())
         }
         
-        var queryItems = [NSURLQueryItem]()
-        
         if !runeOptions.isEmpty {
             var runeQueryItem = NSURLQueryItem(name: "runeListData", value: runeOptions)
             queryItems.append(runeQueryItem)
             
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -528,9 +444,7 @@ public class LoL {
     public func getRune(id: Int, runeDataOptions: [RuneData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/rune/\(id)")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var runeOptions = ""
         if let runeData = runeDataOptions {
@@ -540,17 +454,13 @@ public class LoL {
             runeOptions.removeAtIndex(runeOptions.endIndex.predecessor())
         }
         
-        var queryItems = [NSURLQueryItem]()
-        
         if !runeOptions.isEmpty {
             var runeQueryItem = NSURLQueryItem(name: "runeData", value: runeOptions)
             queryItems.append(runeQueryItem)
             
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -560,9 +470,7 @@ public class LoL {
         
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/summoner-spell")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var spellOptions = ""
         if let spellData = spellDataOptions {
@@ -572,17 +480,13 @@ public class LoL {
             spellOptions.removeAtIndex(spellOptions.endIndex.predecessor())
         }
         
-        var queryItems = [NSURLQueryItem]()
-        
         if !spellOptions.isEmpty {
             var spellQueryItem = NSURLQueryItem(name: "spellData", value: spellOptions)
             queryItems.append(spellQueryItem)
             
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -591,9 +495,7 @@ public class LoL {
     public func getSummonerSpell(id: Int, spellDataOptions: [SpellData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/summoner-spell/\(id)")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var spellOptions = ""
         if let spellData = spellDataOptions {
@@ -603,17 +505,13 @@ public class LoL {
             spellOptions.removeAtIndex(spellOptions.endIndex.predecessor())
         }
         
-        var queryItems = [NSURLQueryItem]()
-        
         if !spellOptions.isEmpty {
             var spellQueryItem = NSURLQueryItem(name: "spellData", value: spellOptions)
             queryItems.append(spellQueryItem)
             
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -622,13 +520,9 @@ public class LoL {
     public func getVersions() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/versions")
         
-        var components = NSURLComponents()
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        var queryItems = [idQueryItem]
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -638,9 +532,7 @@ public class LoL {
     public func getShards() {
         var hostString = String("status.leagueoflegends.com/shards")
         
-        var components = NSURLComponents()
-        components.scheme = "http"
-        components.host = hostString
+        setupComponents("http", hostString: hostString)
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -649,9 +541,7 @@ public class LoL {
     public func getShardStatus() {
         var hostString = String("status.leagueoflegends.com/shards/\(regionRawValue)")
         
-        var components = NSURLComponents()
-        components.scheme = "http"
-        components.host = hostString
+        setupComponents("http", hostString: hostString)
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -662,19 +552,17 @@ public class LoL {
     public func getMatch(id: Int, includeTimeline: Bool) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(MatchVersion)/match/\(id)")
         
-        var components = NSURLComponents()
-        
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         var timelineQueryItem = NSURLQueryItem(name: "includeTimeline", value: "false")
         if includeTimeline == true {
             timelineQueryItem = NSURLQueryItem(name: "includeTimeline", value: "true")
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        let queryItems = [timelineQueryItem, idQueryItem]
-        components.queryItems = queryItems
+        queryItems.append(timelineQueryItem)
+        
+        addApiKeyQueryItemAndSetComponents()
+        
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -684,11 +572,7 @@ public class LoL {
     public func getMatchHistory(summonerId: Int, championIds: [Int]?, rankedQueues: [RankedQueues]?, beginIndex: Int?, endIndex: Int?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(MatchHistoryVersion)/matchhistory/\(summonerId)")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
-        
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         if let championIdsList = championIds {
             var champions = ""
@@ -720,10 +604,8 @@ public class LoL {
             queryItems.append(endIndexQueryItem)
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
+        addApiKeyQueryItemAndSetComponents()
         
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -733,21 +615,15 @@ public class LoL {
     public func getRankedStats(summonerId: Int, season: SEASON?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(StatsVersion)/stats/by-summoner/\(summonerId)/ranked")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
-        
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         if let seasonParameter = season {
             let seasonQueryItem = NSURLQueryItem(name: "season", value: "\(seasonParameter.rawValue)")
             queryItems.append(seasonQueryItem)
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
+        addApiKeyQueryItemAndSetComponents()
         
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -755,21 +631,15 @@ public class LoL {
     public func getPlayerStatsSummary(summonerId: Int, season: SEASON?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(StatsVersion)/stats/by-summoner/\(summonerId)/summary")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
-        
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
         if let seasonParameter = season {
             let seasonQueryItem = NSURLQueryItem(name: "season", value: "\(seasonParameter.rawValue)")
             queryItems.append(seasonQueryItem)
         }
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
+        addApiKeyQueryItemAndSetComponents()
         
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
         
@@ -787,16 +657,10 @@ public class LoL {
             nameString.removeAtIndex(nameString.endIndex.predecessor())
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/by-name/\(nameString)")
-
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
         
-        components.scheme = https
-        components.host = hostString
+        setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        components.queryItems = queryItems
+        addApiKeyQueryItemAndSetComponents()
         
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
@@ -812,16 +676,10 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
+        setupComponents(https, hostString: hostString)
         
-        components.scheme = https
-        components.host = hostString
+        addApiKeyQueryItemAndSetComponents()
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -836,16 +694,10 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)/masteries")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
+        setupComponents(https, hostString: hostString)
         
-        components.scheme = https
-        components.host = hostString
+        addApiKeyQueryItemAndSetComponents()
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -860,16 +712,10 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)/name")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
+        setupComponents(https, hostString: hostString)
         
-        components.scheme = https
-        components.host = hostString
+        addApiKeyQueryItemAndSetComponents()
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -884,16 +730,10 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)/runes")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
+        setupComponents(https, hostString: hostString)
         
-        components.scheme = https
-        components.host = hostString
+        addApiKeyQueryItemAndSetComponents()
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -910,16 +750,10 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(TeamVersion)/team/by-summoner/\(idString)")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
+        setupComponents(https, hostString: hostString)
         
-        components.scheme = https
-        components.host = hostString
+        addApiKeyQueryItemAndSetComponents()
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -934,16 +768,10 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(TeamVersion)/team/\(idString)")
         
-        var queryItems = [NSURLQueryItem]()
-        var components = NSURLComponents()
+        setupComponents(https, hostString: hostString)
         
-        components.scheme = https
-        components.host = hostString
+        addApiKeyQueryItemAndSetComponents()
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
-        queryItems.append(idQueryItem)
-        
-        components.queryItems = queryItems
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
