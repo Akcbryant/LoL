@@ -68,6 +68,12 @@ public class LoL {
         queryItems = []
     }
     
+    private func createURL(hostString: String) {
+        setupComponents(https, hostString: hostString)
+        addApiKeyQueryItemAndSetComponents()
+        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+    }
+    
     // MARK: Champion Info
     
     public func getChampions(freeToPlay: Bool?) {
@@ -96,7 +102,6 @@ public class LoL {
         
         setupComponents(https, hostString: hostString)
         
-        let idQueryItem = NSURLQueryItem(name: "api_key", value: api_key)
         addApiKeyQueryItemAndSetComponents()
 
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
@@ -168,12 +173,7 @@ public class LoL {
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         hostString += "/entry"
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getTeamLeagueInfo(teamIDs: [String]) {
@@ -183,12 +183,7 @@ public class LoL {
         }
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getTeamLeagueInfoEntries(teamIDs: [String]) {
@@ -199,12 +194,7 @@ public class LoL {
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         hostString += "/entry"
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getChallengerLeague(gameType: RankedQueues) {
@@ -213,11 +203,7 @@ public class LoL {
         setupComponents(https, hostString: hostString)
         
         let typeQueryItem = NSURLQueryItem(name: "type", value: gameType.rawValue)
-        queryItems.append(typeQueryItem)
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getMasterLeague(gameType: RankedQueues) {
@@ -226,10 +212,7 @@ public class LoL {
         setupComponents(https, hostString: hostString)
         
         let typeQueryItem = NSURLQueryItem(name: "type", value: gameType.rawValue)
-        queryItems.append(typeQueryItem)
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        createURL(hostString)
         
     }
     
@@ -239,8 +222,6 @@ public class LoL {
         
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/champion")
 
-        setupComponents(https, hostString: hostString)
-        
         if let champData = champDataOptions {
             var champOptions = ""
             for option in champData {
@@ -251,17 +232,13 @@ public class LoL {
             queryItems.append(champQueryItem)
         }
 
-        addApiKeyQueryItemAndSetComponents()
-
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        createURL(hostString)
         
     }
     
     public func getChampionData(id: Int, champDataOptions: [ChampData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/champion/\(id)")
         
-        setupComponents(https, hostString: hostString)
-        
         if let champData = champDataOptions {
             var champOptions = ""
             for option in champData {
@@ -271,17 +248,11 @@ public class LoL {
             var champQueryItem = NSURLQueryItem(name: "champData", value: champOptions)
             queryItems.append(champQueryItem)
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getItemList(itemDataOptions: [ItemListData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/item")
-        
-        setupComponents(https, hostString: hostString)
         
         var itemOptions = ""
         if let itemData = itemDataOptions {
@@ -296,17 +267,11 @@ public class LoL {
             queryItems.append(itemQueryItem)
             
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
 
     public func getItem(id: Int, itemDataOptions: [ItemData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/item/\(id)")
-        
-        setupComponents(https, hostString: hostString)
         
         var itemOptions = ""
         if let itemData = itemDataOptions {
@@ -322,50 +287,30 @@ public class LoL {
             
         }
         
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getLanguageStrings() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/language-strings")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getSupportedLanguages() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/languages")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getMapData() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/map")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getMasteryList(masteryDataOptions: [MasteryListData]?) {
     
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/mastery")
-        
-        setupComponents(https, hostString: hostString)
         
         if let masteryData = masteryDataOptions {
             var masteryOptions = ""
@@ -376,17 +321,11 @@ public class LoL {
             var masteryQueryItem = NSURLQueryItem(name: "masteryListData", value: masteryOptions)
             queryItems.append(masteryQueryItem)
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getMastery(id: Int, masteryDataOptions: [MasteryData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/mastery/\(id)")
-        
-        setupComponents(https, hostString: hostString)
         
         if let masteryData = masteryDataOptions {
             var masteryOptions = ""
@@ -397,29 +336,18 @@ public class LoL {
             var masteryQueryItem = NSURLQueryItem(name: "masteryData", value: masteryOptions)
             queryItems.append(masteryQueryItem)
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getRealmData() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/realm")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getRuneList(runeDataOptions: [RuneListData]?) {
         
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/rune")
-        
-        setupComponents(https, hostString: hostString)
         
         var runeOptions = ""
         if let runeData = runeDataOptions {
@@ -434,17 +362,11 @@ public class LoL {
             queryItems.append(runeQueryItem)
             
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getRune(id: Int, runeDataOptions: [RuneData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/rune/\(id)")
-        
-        setupComponents(https, hostString: hostString)
         
         var runeOptions = ""
         if let runeData = runeDataOptions {
@@ -460,18 +382,13 @@ public class LoL {
             
         }
         
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getSummonerSpellList(spellDataOptions: [SpellData]?) {
         
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/summoner-spell")
         
-        setupComponents(https, hostString: hostString)
-        
         var spellOptions = ""
         if let spellData = spellDataOptions {
             for option in spellDataOptions! {
@@ -486,17 +403,12 @@ public class LoL {
             
         }
         
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getSummonerSpell(id: Int, spellDataOptions: [SpellData]?) {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/summoner-spell/\(id)")
         
-        setupComponents(https, hostString: hostString)
-        
         var spellOptions = ""
         if let spellData = spellDataOptions {
             for option in spellDataOptions! {
@@ -510,39 +422,25 @@ public class LoL {
             queryItems.append(spellQueryItem)
             
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getVersions() {
         var hostString = String("\(RegionBaseURL.global.rawValue)/api/lol/static-data/\(regionRawValue)/v\(LoLStaticDataVersion)/versions")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     // MARK: Shard Status
     public func getShards() {
         var hostString = String("status.leagueoflegends.com/shards")
-        
         setupComponents("http", hostString: hostString)
-        
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
     }
     
     public func getShardStatus() {
         var hostString = String("status.leagueoflegends.com/shards/\(regionRawValue)")
-        
         setupComponents("http", hostString: hostString)
-        
         URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
         
     }
@@ -552,7 +450,6 @@ public class LoL {
     public func getMatch(id: Int, includeTimeline: Bool) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(MatchVersion)/match/\(id)")
         
-        setupComponents(https, hostString: hostString)
         
         var timelineQueryItem = NSURLQueryItem(name: "includeTimeline", value: "false")
         if includeTimeline == true {
@@ -561,9 +458,7 @@ public class LoL {
         
         queryItems.append(timelineQueryItem)
         
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        createURL(hostString)
         
     }
     
@@ -571,8 +466,6 @@ public class LoL {
     
     public func getMatchHistory(summonerId: Int, championIds: [Int]?, rankedQueues: [RankedQueues]?, beginIndex: Int?, endIndex: Int?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(MatchHistoryVersion)/matchhistory/\(summonerId)")
-        
-        setupComponents(https, hostString: hostString)
         
         if let championIdsList = championIds {
             var champions = ""
@@ -604,9 +497,7 @@ public class LoL {
             queryItems.append(endIndexQueryItem)
         }
         
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        createURL(hostString)
         
     }
     
@@ -615,34 +506,21 @@ public class LoL {
     public func getRankedStats(summonerId: Int, season: SEASON?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(StatsVersion)/stats/by-summoner/\(summonerId)/ranked")
         
-        setupComponents(https, hostString: hostString)
-        
         if let seasonParameter = season {
             let seasonQueryItem = NSURLQueryItem(name: "season", value: "\(seasonParameter.rawValue)")
             queryItems.append(seasonQueryItem)
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getPlayerStatsSummary(summonerId: Int, season: SEASON?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(StatsVersion)/stats/by-summoner/\(summonerId)/summary")
         
-        setupComponents(https, hostString: hostString)
-        
         if let seasonParameter = season {
             let seasonQueryItem = NSURLQueryItem(name: "season", value: "\(seasonParameter.rawValue)")
             queryItems.append(seasonQueryItem)
         }
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
-        
+        createURL(hostString)
     }
     
     // MARK: Summoner Info
@@ -658,12 +536,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/by-name/\(nameString)")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getSummonerObject(summonerIds: [Int]) {
@@ -676,12 +549,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getMasteryPages(summonerIds: [Int]) {
@@ -694,12 +562,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)/masteries")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getSummonerNames(summonerIds: [Int]) {
@@ -712,12 +575,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)/name")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getRunePages(summonerIds: [Int]) {
@@ -730,12 +588,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(SummonerVersion)/summoner/\(idString)/runes")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     // MARK: Teams Info
@@ -750,12 +603,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(TeamVersion)/team/by-summoner/\(idString)")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     public func getTeams(teamIds: [String]) {
@@ -768,12 +616,7 @@ public class LoL {
         }
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(TeamVersion)/team/\(idString)")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
 
     // MARK: Enum Constants
