@@ -79,8 +79,6 @@ public class LoL {
     public func getChampions(freeToPlay: Bool?) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(ChampionVersion)/champion")
         
-        setupComponents(https, hostString: hostString)
-        
         var ftpQueryItem = NSURLQueryItem(name: "freeToPlay", value: "false")
         if let FTP = freeToPlay {
             if FTP == true {
@@ -88,24 +86,16 @@ public class LoL {
             }
         }
         
-        
         queryItems.append(ftpQueryItem)
         
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        createURL(hostString)
 
     }
     
     public func getChampion(championID: Int) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(ChampionVersion)/champion/\(championID)")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     // MARK: Current Game
@@ -113,13 +103,7 @@ public class LoL {
     public func getcurrentGame(platformID: PlatformID, summonerID: Int) {
         let hostString = String("\(regionBaseURLRawValue)/observer-mode/rest/consumer/getSpectatorGameInfo/\(platformID.rawValue)/\(summonerID)")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     // MARK: Featured Games
@@ -127,12 +111,7 @@ public class LoL {
     public func getFeaturedGames() {
         let hostString = String("\(regionBaseURLRawValue)/observer-mode/rest/featured")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     // MARK: Recent Games
@@ -140,12 +119,7 @@ public class LoL {
     public func getRecentGames(summonerID: Int) {
         var hostString = String("\(regionBaseURLRawValue)/api/lol/\(regionRawValue)/v\(GameVersion)/game/by-summoner/\(summonerID)/recent")
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
-        
+        createURL(hostString)
     }
     
     // MARK: Leagues
@@ -157,11 +131,7 @@ public class LoL {
         }
         hostString.removeAtIndex(hostString.endIndex.predecessor())
         
-        setupComponents(https, hostString: hostString)
-        
-        addApiKeyQueryItemAndSetComponents()
-        
-        URL = components.URLString.stringByReplacingPercentEscapesUsingEncoding(NSUTF8StringEncoding)!
+        createURL(hostString)
         
     }
     
